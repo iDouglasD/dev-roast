@@ -95,6 +95,66 @@ className={exemploVariants({ variant, size, className })}
 // ERRADO — não importar twMerge manualmente
 import { twMerge } from "tailwind-merge";
 className={twMerge(exemploVariants({ variant, size }), className)}
+
+// ERRADO — não usar template literals para juntar classes
+className={`classes-base ${className ?? ""}`}
+
+// ERRADO — não usar operador ternário/nullish para className
+className={className ? `base ${className}` : "base"}
+```
+
+---
+
+## Regra Obrigatória: `tv()` em Todo Componente
+
+**Todo componente do projeto** — seja em `src/components/ui/` ou `src/components/` — **deve** usar `tv()` para definir suas classes base e aceitar `className` como prop para merge via `tailwind-variants`.
+
+Isso se aplica a:
+- Componentes primitivos de UI (`src/components/ui/`)
+- Componentes de feature/layout (`src/components/`)
+- Componentes com ou sem variantes
+
+Mesmo que o componente não tenha variantes, deve usar `tv()` com apenas a propriedade `base`:
+
+```tsx
+import { tv } from "tailwind-variants";
+
+const navbarVariants = tv({
+  base: "flex h-14 items-center justify-between",
+});
+
+// No JSX:
+<nav className={navbarVariants({ className })} {...props}>
+```
+
+Isso garante que qualquer consumidor possa customizar o componente via `className` com merge inteligente de classes (sem conflitos), mantendo um padrão único no projeto.
+
+---
+
+## Componentes de Feature/Layout (fora de `ui/`)
+
+Componentes em `src/components/` (ex: `navbar.tsx`, `roast-form.tsx`, `code-editor.tsx`) seguem o mesmo padrão de `tv()` para className, mas com diferenças:
+
+- **Não precisam** de `forwardRef` / `displayName` (a menos que sejam wrappers de elementos que precisem de ref)
+- **Devem** aceitar `className` via props e usar `tv()` para merge
+- **Devem** exportar: componente, variantes e tipo de props (named exports)
+- Estilização de layout/posicionamento (ex: `w-editor`, `max-w-full`) deve ser aplicada via `className` no local de uso, não hardcoded no componente
+
+```tsx
+import type { ComponentProps } from "react";
+import { tv } from "tailwind-variants";
+
+const featureVariants = tv({
+  base: "flex flex-col gap-4",
+});
+
+type FeatureProps = ComponentProps<"div">;
+
+function Feature({ className, ...props }: FeatureProps) {
+  return <div className={featureVariants({ className })} {...props} />;
+}
+
+export { Feature, featureVariants, type FeatureProps };
 ```
 
 ---
@@ -135,13 +195,13 @@ const buttonVariants = tv({
 
 ## Checklist para Novos Componentes
 
-- [ ] Arquivo criado em `src/components/ui/` com nome em kebab-case
-- [ ] Usa `tv()` do `tailwind-variants` para variantes
+- [ ] Arquivo criado em `src/components/` (ou `src/components/ui/`) com nome em kebab-case
+- [ ] Usa `tv()` do `tailwind-variants` para classes base (mesmo sem variantes)
+- [ ] Aceita `className` via props e passa dentro da chamada `tv()` — nunca usa template literals, `??`, ou `twMerge` direto
 - [ ] Estende `ComponentProps<"elemento">` para props nativas
-- [ ] Usa `forwardRef` com tipagem correta
-- [ ] Define `displayName`
-- [ ] Passa `className` dentro da chamada `tv()` (não usa `twMerge` direto)
+- [ ] Usa `forwardRef` com tipagem correta (obrigatório em `ui/`, opcional em `components/`)
+- [ ] Define `displayName` (obrigatório em `ui/`, opcional em `components/`)
 - [ ] Exporta: componente, função de variantes e tipo de props (named exports)
-- [ ] Adicionado à página de exemplos em `src/app/components/page.tsx`
+- [ ] Estilos de layout/posicionamento aplicados via `className` no local de uso
 - [ ] `biome check` passando sem erros
 - [ ] `next build` passando sem erros

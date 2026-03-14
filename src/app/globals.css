@@ -25,9 +25,22 @@
   --color-accent-amber: #f59e0b;
   --color-accent-cyan: #06b6d4;
 
+  /* syntax highlighting */
+  --color-syn-keyword: #a0a0a0;
+  --color-syn-function: #ffc799;
+  --color-syn-variable: #ffffff;
+  --color-syn-operator: #a0a0a0;
+  --color-syn-string: #99ffe4;
+  --color-syn-number: #ffc799;
+  --color-syn-property: #a0a0a0;
+  --color-syn-type: #ffc799;
+  --color-syn-comment: #8b8b8b;
+
   /* diff */
-  --color-diff-removed: #1a0a0a;
-  --color-diff-added: #0a1a0f;
+  --color-diff-removed-bg: #ef444415;
+  --color-diff-added-bg: #10b98115;
+  --color-diff-removed-text: #ef4444;
+  --color-diff-added-text: #10b981;
 
   /* typography — code font size (13px) */
   --text-code: 0.8125rem;
@@ -40,6 +53,13 @@
   /* max-widths */
   --max-w-card: 30rem;
   --max-w-code: 35rem;
+  --max-w-editor: 48.75rem;
+  --max-w-leaderboard: 60rem;
+
+  /* widths */
+  --width-editor: 48.75rem;
+  --width-leaderboard: 60rem;
+  --width-results: 80rem;
 }
 
 body {

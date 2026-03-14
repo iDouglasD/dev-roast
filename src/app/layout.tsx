@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
+import { Navbar } from "@/components/navbar";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -9,7 +10,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Dev Roast",
-  description: "Dev Roast",
+  description: "Paste your code. Get roasted.",
 };
 
 export default function RootLayout({
@@ -19,7 +20,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${jetbrainsMono.variable} antialiased`}>
+      <body className={`${jetbrainsMono.variable} flex min-h-screen flex-col antialiased`}>
+        <Navbar />
         {children}
       </body>
     </html>
