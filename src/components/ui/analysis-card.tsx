@@ -1,60 +1,92 @@
-import { type ComponentProps, forwardRef, type ReactNode } from "react";
+import { type ComponentProps, forwardRef } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
-import { Badge } from "./badge";
 
-const analysisCardVariants = tv({
+const analysisCardRootVariants = tv({
   base: "flex w-full flex-col gap-3 border border-border-primary p-5",
 });
 
-type Severity = "critical" | "warning" | "good";
+type AnalysisCardRootVariants = VariantProps<typeof analysisCardRootVariants>;
 
-type AnalysisCardVariants = VariantProps<typeof analysisCardVariants>;
+type AnalysisCardRootProps = ComponentProps<"div"> & AnalysisCardRootVariants;
 
-type AnalysisCardProps = ComponentProps<"div"> &
-  AnalysisCardVariants & {
-    severity: Severity;
-    severityLabel?: string;
-    title: string;
-    description?: string;
-    children?: ReactNode;
-  };
-
-const defaultLabels: Record<Severity, string> = {
-  critical: "critical",
-  warning: "warning",
-  good: "good",
-};
-
-const AnalysisCard = forwardRef<HTMLDivElement, AnalysisCardProps>(
-  (
-    {
-      className,
-      severity,
-      severityLabel,
-      title,
-      description,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
+const AnalysisCardRoot = forwardRef<HTMLDivElement, AnalysisCardRootProps>(
+  ({ className, children, ...props }, ref) => {
     return (
-      <div ref={ref} className={analysisCardVariants({ className })} {...props}>
-        <Badge variant={severity}>
-          {severityLabel ?? defaultLabels[severity]}
-        </Badge>
-        <p className="font-mono text-code text-text-primary">{title}</p>
-        {description && (
-          <p className="font-mono text-xs leading-relaxed text-text-secondary">
-            {description}
-          </p>
-        )}
+      <div
+        ref={ref}
+        className={analysisCardRootVariants({ className })}
+        {...props}
+      >
         {children}
       </div>
     );
   },
 );
 
-AnalysisCard.displayName = "AnalysisCard";
+AnalysisCardRoot.displayName = "AnalysisCardRoot";
 
-export { AnalysisCard, analysisCardVariants, type AnalysisCardProps };
+// ---
+
+const analysisCardTitleVariants = tv({
+  base: "font-mono text-code font-medium text-text-primary",
+});
+
+type AnalysisCardTitleProps = ComponentProps<"p">;
+
+const AnalysisCardTitle = forwardRef<
+  HTMLParagraphElement,
+  AnalysisCardTitleProps
+>(({ className, ...props }, ref) => {
+  return (
+    <p
+      ref={ref}
+      className={analysisCardTitleVariants({ className })}
+      {...props}
+    />
+  );
+});
+
+AnalysisCardTitle.displayName = "AnalysisCardTitle";
+
+// ---
+
+const analysisCardDescriptionVariants = tv({
+  base: "font-mono text-xs leading-relaxed text-text-secondary",
+});
+
+type AnalysisCardDescriptionProps = ComponentProps<"p">;
+
+const AnalysisCardDescription = forwardRef<
+  HTMLParagraphElement,
+  AnalysisCardDescriptionProps
+>(({ className, ...props }, ref) => {
+  return (
+    <p
+      ref={ref}
+      className={analysisCardDescriptionVariants({ className })}
+      {...props}
+    />
+  );
+});
+
+AnalysisCardDescription.displayName = "AnalysisCardDescription";
+
+// ---
+
+const AnalysisCard = Object.assign(AnalysisCardRoot, {
+  Title: AnalysisCardTitle,
+  Description: AnalysisCardDescription,
+});
+
+export {
+  AnalysisCard,
+  AnalysisCardRoot,
+  AnalysisCardTitle,
+  AnalysisCardDescription,
+  analysisCardRootVariants,
+  analysisCardTitleVariants,
+  analysisCardDescriptionVariants,
+  type AnalysisCardRootProps,
+  type AnalysisCardTitleProps,
+  type AnalysisCardDescriptionProps,
+};

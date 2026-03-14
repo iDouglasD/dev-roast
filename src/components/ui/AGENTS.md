@@ -182,6 +182,81 @@ const buttonVariants = tv({
 
 ---
 
+## Composição de Componentes (Composition Pattern)
+
+Componentes com sub-partes internas (ex: título, descrição, header, body) devem usar o **pattern de composição** ao invés de props monolíticas. Cada sub-parte é um sub-componente exportado e acessível via `Component.SubPart`.
+
+**Quando usar composição:**
+- O componente tem 2+ "slots" internos (título, descrição, header, body, etc.)
+- O consumidor pode querer customizar ou omitir partes individuais
+- O componente atua como container que agrupa conteúdo flexível
+
+**Quando NÃO usar composição:**
+- Componentes atômicos/leaf sem sub-partes (Button, Badge, DiffLine)
+- Componentes com lógica interna complexa que não faz sentido expor (ScoreRing, Toggle)
+
+### Estrutura
+
+```tsx
+import { type ComponentProps, forwardRef } from "react";
+import { tv } from "tailwind-variants";
+
+// --- Root ---
+const cardRootVariants = tv({ base: "flex flex-col gap-3 border p-5" });
+type CardRootProps = ComponentProps<"div">;
+
+const CardRoot = forwardRef<HTMLDivElement, CardRootProps>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cardRootVariants({ className })} {...props} />
+  ),
+);
+CardRoot.displayName = "CardRoot";
+
+// --- Title ---
+const cardTitleVariants = tv({ base: "font-mono text-sm font-medium" });
+type CardTitleProps = ComponentProps<"p">;
+
+const CardTitle = forwardRef<HTMLParagraphElement, CardTitleProps>(
+  ({ className, ...props }, ref) => (
+    <p ref={ref} className={cardTitleVariants({ className })} {...props} />
+  ),
+);
+CardTitle.displayName = "CardTitle";
+
+// --- Compound export via Object.assign ---
+const Card = Object.assign(CardRoot, {
+  Title: CardTitle,
+});
+
+export {
+  Card,
+  CardRoot,
+  CardTitle,
+  cardRootVariants,
+  cardTitleVariants,
+  type CardRootProps,
+  type CardTitleProps,
+};
+```
+
+### Uso pelo consumidor
+
+```tsx
+<Card>
+  <Badge variant="critical">critical</Badge>
+  <Card.Title>using var instead of const/let</Card.Title>
+</Card>
+```
+
+### Regras
+
+- Usar `Object.assign(Root, { SubPart })` para expor sub-componentes via dot notation
+- Cada sub-componente deve ter seu próprio `tv()`, `forwardRef`, `displayName`
+- Exportar individualmente (named) **e** via compound (`Card.Title`)
+- O Root não deve renderizar sub-partes internamente — recebe tudo via `children`
+
+---
+
 ## Convenções de Nomes
 
 | Item | Convenção | Exemplo |
