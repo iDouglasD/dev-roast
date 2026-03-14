@@ -108,7 +108,10 @@ const ScoreRing = forwardRef<HTMLDivElement, ScoreRingProps>(
 
         {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-          <span className="font-mono text-5xl font-bold text-text-primary leading-none">
+          <span
+            className="font-mono text-5xl font-bold leading-none"
+            style={{ color: scoreColor }}
+          >
             {score}
           </span>
           <span className="font-mono text-base text-text-tertiary leading-none">

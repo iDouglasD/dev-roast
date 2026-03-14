@@ -2,11 +2,11 @@ import { type ComponentProps, forwardRef } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const diffLineVariants = tv({
-  base: "flex w-full items-center gap-2 px-4 py-2 font-mono text-code",
+  base: "flex h-7 w-full items-center px-4 font-mono text-xs",
   variants: {
     variant: {
-      removed: "bg-diff-removed",
-      added: "bg-diff-added",
+      removed: "bg-diff-removed-bg",
+      added: "bg-diff-added-bg",
       context: "",
     },
   },
@@ -16,7 +16,7 @@ const diffLineVariants = tv({
 });
 
 const prefixVariants = tv({
-  base: "shrink-0 select-none font-mono text-code",
+  base: "w-5 shrink-0 select-none font-mono text-xs",
   variants: {
     variant: {
       removed: "text-accent-red",
@@ -30,12 +30,12 @@ const prefixVariants = tv({
 });
 
 const codeVariants = tv({
-  base: "font-mono text-code",
+  base: "font-mono text-xs",
   variants: {
     variant: {
-      removed: "text-text-secondary",
-      added: "text-text-primary",
-      context: "text-text-secondary",
+      removed: "text-diff-removed-text",
+      added: "text-diff-added-text",
+      context: "text-text-primary",
     },
   },
   defaultVariants: {
