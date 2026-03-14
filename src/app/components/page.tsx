@@ -78,32 +78,51 @@ export default function ComponentsPage() {
       {/* Analysis Card */}
       <Section title="analysis_card">
         <div className="max-w-card space-y-4">
-          <AnalysisCard
-            severity="critical"
-            title="using var instead of const/let"
-            description="the var keyword is function-scoped rather than block-scoped, which can lead to unexpected behavior and bugs. modern javascript uses const for immutable bindings and let for mutable ones."
-          />
-          <AnalysisCard
-            severity="warning"
-            title="manual loop instead of array methods"
-            description="using a for loop with an index variable is more error-prone than using array methods like reduce, map, or forEach."
-          />
-          <AnalysisCard
-            severity="good"
-            title="function is properly named"
-            description="the function name clearly describes what it does, making the code self-documenting."
-          />
+          <AnalysisCard>
+            <Badge variant="critical">critical</Badge>
+            <AnalysisCard.Title>
+              using var instead of const/let
+            </AnalysisCard.Title>
+            <AnalysisCard.Description>
+              the var keyword is function-scoped rather than block-scoped, which
+              can lead to unexpected behavior and bugs. modern javascript uses
+              const for immutable bindings and let for mutable ones.
+            </AnalysisCard.Description>
+          </AnalysisCard>
+
+          <AnalysisCard>
+            <Badge variant="warning">warning</Badge>
+            <AnalysisCard.Title>
+              manual loop instead of array methods
+            </AnalysisCard.Title>
+            <AnalysisCard.Description>
+              using a for loop with an index variable is more error-prone than
+              using array methods like reduce, map, or forEach.
+            </AnalysisCard.Description>
+          </AnalysisCard>
+
+          <AnalysisCard>
+            <Badge variant="good">good</Badge>
+            <AnalysisCard.Title>function is properly named</AnalysisCard.Title>
+            <AnalysisCard.Description>
+              the function name clearly describes what it does, making the code
+              self-documenting.
+            </AnalysisCard.Description>
+          </AnalysisCard>
         </div>
       </Section>
 
       {/* CodeBlock */}
       <Section title="code_block">
         <div className="max-w-code">
-          <CodeBlock
-            code={sampleCode}
-            lang="javascript"
-            filename="calculate.js"
-          />
+          <CodeBlock>
+            <CodeBlock.Header>
+              <span className="font-mono text-xs text-text-tertiary">
+                calculate.js
+              </span>
+            </CodeBlock.Header>
+            <CodeBlock.Body code={sampleCode} lang="javascript" />
+          </CodeBlock>
         </div>
       </Section>
 
