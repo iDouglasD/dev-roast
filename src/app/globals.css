@@ -67,3 +67,18 @@ body {
   color: var(--color-text-primary);
   font-family: var(--font-sans);
 }
+
+/* Code editor overlay — reset Shiki output to align with textarea */
+.code-editor-overlay pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.code-editor-overlay code {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
