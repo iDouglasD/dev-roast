@@ -21,24 +21,11 @@ All spacing, colors, typography, and layout decisions come from this file.
 
 ```
 src/
-├── app/
-│   ├── layout.tsx          # Root layout, fonts, Navbar
-│   ├── globals.css         # @theme inline tokens (colors, syn-*, diff-*, spacing)
-│   ├── page.tsx            # Screen 1 — Homepage / Code Input
-│   └── components/         # Showcase route
+├── app/                    # Routes, layouts, globals.css
+│   └── globals.css         # @theme inline tokens (colors, spacing, typography)
 └── components/
-    ├── navbar.tsx           # Navbar (server component)
-    ├── code-editor.tsx      # Code editor with line numbers
-    ├── roast-form.tsx       # Code input + toggle + submit
-    └── ui/                  # Primitives (see ui/AGENTS.md)
-        ├── AGENTS.md        # Component patterns & composition rules
-        ├── button.tsx
-        ├── badge.tsx
-        ├── toggle.tsx
-        ├── diff-line.tsx
-        ├── analysis-card.tsx
-        ├── code-block.tsx
-        └── score-ring.tsx
+    ├── ui/                 # Primitives — see ui/AGENTS.md
+    └── ...                 # Feature / layout components
 ```
 
 ## Global Conventions
