@@ -1,10 +1,19 @@
 "use client";
 
-import { type ComponentProps, forwardRef, useCallback, useRef } from "react";
+import {
+  type ComponentProps,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { tv } from "tailwind-variants";
+import { highlight } from "@/lib/highlighter";
 
 const LINE_HEIGHT_PX = 20;
 const GUTTER_PADDING_Y = 16;
+const HIGHLIGHT_DEBOUNCE_MS = 150;
 
 const codeEditorVariants = tv({
   base: "w-full overflow-hidden border border-border-primary bg-bg-input",
@@ -13,6 +22,7 @@ const codeEditorVariants = tv({
 type CodeEditorProps = Omit<ComponentProps<"div">, "onChange"> & {
   value: string;
   onChange: (value: string) => void;
+  language: string;
   placeholder?: string;
 };
 
@@ -25,18 +35,47 @@ const EDITOR_BODY_HEIGHT = 360 - 40;
 const MIN_LINES = getVisibleLineCount(EDITOR_BODY_HEIGHT);
 
 const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
-  ({ className, value, onChange, placeholder, ...props }, ref) => {
+  ({ className, value, onChange, language, placeholder, ...props }, ref) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const gutterRef = useRef<HTMLDivElement>(null);
+    const overlayRef = useRef<HTMLDivElement>(null);
+    const [highlightedHtml, setHighlightedHtml] = useState("");
 
     const contentLines = value ? value.split("\n").length : 1;
     const lineCount = Math.max(contentLines, MIN_LINES);
 
+    // Sync scroll between textarea, gutter, and overlay
     const handleScroll = useCallback(() => {
-      if (textareaRef.current && gutterRef.current) {
-        gutterRef.current.scrollTop = textareaRef.current.scrollTop;
+      const textarea = textareaRef.current;
+      if (!textarea) return;
+
+      if (gutterRef.current) {
+        gutterRef.current.scrollTop = textarea.scrollTop;
+      }
+      if (overlayRef.current) {
+        overlayRef.current.scrollTop = textarea.scrollTop;
+        overlayRef.current.scrollLeft = textarea.scrollLeft;
       }
     }, []);
+
+    // Debounced syntax highlighting
+    useEffect(() => {
+      if (!value) {
+        setHighlightedHtml("");
+        return;
+      }
+
+      const timer = setTimeout(async () => {
+        try {
+          const html = await highlight(value, language);
+          setHighlightedHtml(html);
+        } catch {
+          setHighlightedHtml("");
+        }
+      }, HIGHLIGHT_DEBOUNCE_MS);
+
+      return () => clearTimeout(timer);
+    }, [value, language]);
 
     return (
       <div ref={ref} className={codeEditorVariants({ className })} {...props}>
@@ -62,16 +101,27 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
             ))}
           </div>
 
-          {/* Textarea */}
-          <textarea
-            ref={textareaRef}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            onScroll={handleScroll}
-            placeholder={placeholder}
-            spellCheck={false}
-            className="flex-1 resize-none bg-transparent px-4 py-4 font-mono text-xs leading-5 text-text-primary outline-none placeholder:text-text-muted"
-          />
+          {/* Code area: overlay + textarea stacked via CSS grid */}
+          <div className="relative min-w-0 flex-1">
+            {/* Highlighted code overlay */}
+            <div
+              ref={overlayRef}
+              className="code-editor-overlay pointer-events-none absolute inset-0 overflow-hidden px-4 py-4 font-mono text-xs leading-5"
+              aria-hidden="true"
+              dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+            />
+
+            {/* Transparent textarea for input */}
+            <textarea
+              ref={textareaRef}
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              onScroll={handleScroll}
+              placeholder={placeholder}
+              spellCheck={false}
+              className="absolute inset-0 size-full resize-none bg-transparent px-4 py-4 font-mono text-xs leading-5 text-transparent caret-text-primary outline-none placeholder:text-text-muted"
+            />
+          </div>
         </div>
       </div>
     );

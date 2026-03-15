@@ -20,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${jetbrainsMono.variable} flex min-h-screen flex-col antialiased`}>
+      <body
+        className={`${jetbrainsMono.variable} flex min-h-screen flex-col antialiased`}
+      >
         <Navbar />
         {children}
       </body>

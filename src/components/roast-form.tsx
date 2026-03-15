@@ -1,10 +1,14 @@
 "use client";
 
-import { type ComponentProps, useState } from "react";
+import flourite from "flourite";
+import { type ComponentProps, useCallback, useEffect, useState } from "react";
 import { tv } from "tailwind-variants";
 import { CodeEditor } from "@/components/code-editor";
+import { LanguageSelector } from "@/components/language-selector";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
+
+const DETECT_DEBOUNCE_MS = 300;
 
 const roastFormVariants = tv({
   base: "flex flex-col items-center gap-8",
@@ -16,12 +20,53 @@ function RoastForm({ className, ...props }: RoastFormProps) {
   const [code, setCode] = useState("");
   const [roastMode, setRoastMode] = useState(true);
 
+  /** "auto" or a specific Shiki language ID */
+  const [languageMode, setLanguageMode] = useState<"auto" | string>("auto");
+  /** Language detected by flourite (updated on code change) */
+  const [detectedLanguage, setDetectedLanguage] = useState("text");
+
+  // Auto-detect language when code changes (debounced)
+  useEffect(() => {
+    if (languageMode !== "auto") return;
+    if (!code.trim()) {
+      setDetectedLanguage("text");
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      const result = flourite(code, { shiki: true });
+      setDetectedLanguage(
+        result.language === "Unknown" ? "text" : result.language,
+      );
+    }, DETECT_DEBOUNCE_MS);
+
+    return () => clearTimeout(timer);
+  }, [code, languageMode]);
+
+  const handleLanguageChange = useCallback((mode: "auto" | string) => {
+    setLanguageMode(mode);
+  }, []);
+
+  /** The effective language passed to the editor */
+  const activeLanguage =
+    languageMode === "auto" ? detectedLanguage : languageMode;
+
   return (
     <div className={roastFormVariants({ className })} {...props}>
+      {/* Language selector — above editor */}
+      <div className="flex w-full justify-end">
+        <LanguageSelector
+          mode={languageMode}
+          detectedLanguage={detectedLanguage}
+          onChange={handleLanguageChange}
+        />
+      </div>
+
       {/* Code Editor */}
       <CodeEditor
         value={code}
         onChange={setCode}
+        language={activeLanguage}
         placeholder="// paste your code here..."
       />
 
