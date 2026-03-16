@@ -15,8 +15,21 @@ const LINE_HEIGHT_PX = 20;
 const GUTTER_PADDING_Y = 16;
 const HIGHLIGHT_DEBOUNCE_MS = 150;
 
+export const MAX_CODE_CHARS = 2000;
+
 const codeEditorVariants = tv({
   base: "w-full overflow-hidden border border-border-primary bg-bg-input",
+});
+
+const charCounterVariants = tv({
+  base: "font-mono text-xs tabular-nums",
+  variants: {
+    overLimit: {
+      true: "text-accent-red",
+      false: "text-text-tertiary",
+    },
+  },
+  defaultVariants: { overLimit: false },
 });
 
 type CodeEditorProps = Omit<ComponentProps<"div">, "onChange"> & {
@@ -84,6 +97,17 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
           <span className="size-3 rounded-full bg-accent-red" />
           <span className="size-3 rounded-full bg-accent-amber" />
           <span className="size-3 rounded-full bg-accent-green" />
+        </div>
+
+        {/* Char counter */}
+        <div className="flex justify-end border-b border-border-primary px-3 py-1">
+          <span
+            className={charCounterVariants({
+              overLimit: value.length > MAX_CODE_CHARS,
+            })}
+          >
+            {value.length}/{MAX_CODE_CHARS}
+          </span>
         </div>
 
         {/* Editor body */}
