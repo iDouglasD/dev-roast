@@ -30,4 +30,20 @@ export const leaderboardRouter = createTRPCRouter({
       .orderBy(asc(roasts.score), desc(roasts.createdAt))
       .limit(3);
   }),
+
+  top20: baseProcedure.query(async ({ ctx }) => {
+    return ctx.db
+      .select({
+        id: roasts.id,
+        score: roasts.score,
+        code: roasts.code,
+        language: roasts.language,
+        lineCount: roasts.lineCount,
+        verdict: roasts.verdict,
+        roastComment: roasts.roastComment,
+      })
+      .from(roasts)
+      .orderBy(asc(roasts.score), desc(roasts.createdAt))
+      .limit(20);
+  }),
 });
