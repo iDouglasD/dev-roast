@@ -11,6 +11,8 @@ AI code roasting app with a terminal/hacker aesthetic.
 - Biome (lint + format, 2-space indent)
 - Shiki (syntax highlighting, server-side)
 - Base UI React (headless primitives)
+- Drizzle ORM + PostgreSQL 16 (Docker)
+- tRPC v11 + TanStack Query v5
 
 ## Design Source
 
@@ -21,11 +23,15 @@ All spacing, colors, typography, and layout decisions come from this file.
 
 ```
 src/
-├── app/                    # Routes, layouts, globals.css
+├── app/                    # Routes, layouts, globals.css — see app/AGENTS.md
+│   ├── api/trpc/[trpc]/    # tRPC HTTP handler
 │   └── globals.css         # @theme inline tokens (colors, spacing, typography)
-└── components/
-    ├── ui/                 # Primitives — see ui/AGENTS.md
-    └── ...                 # Feature / layout components
+├── components/
+│   ├── ui/                 # Primitives — see ui/AGENTS.md
+│   └── ...                 # Feature / layout components
+├── db/                     # Drizzle schema + client — see db/AGENTS.md
+├── lib/                    # Shared utilities — see lib/AGENTS.md
+└── trpc/                   # tRPC setup — see trpc/AGENTS.md
 ```
 
 ## Global Conventions
@@ -34,11 +40,12 @@ src/
 - **CSS tokens**: Define in `@theme inline` (rem units). Never use arbitrary bracket values when a utility or token exists.
 - **Tailwind v4**: Important suffix is `!` not prefix (e.g. `text-code!`).
 - **tv() mandatory**: Every component uses `tv()` for class merging — ui/ and feature components alike.
-- **Named exports only**: No `export default` anywhere.
+- **Named exports only**: No `export default` anywhere (Next.js pages/layouts are the sole exception — required by the framework).
 - **JSX comments**: Text starting with `//` must be wrapped in `{"// ..."}`.
 - **Biome rules off**: `noDangerouslySetInnerHtml`, `noArrayIndexKey`.
 - **Layout styles**: Applied via `className` at call site, never hardcoded inside components.
 - **Validation**: `npx biome check .` + `npm run build` after changes.
+- **Path alias**: `@/*` maps to `src/*`. Always use `@/` for internal imports.
 
 ## Component Patterns
 
@@ -49,11 +56,22 @@ See [`src/components/ui/AGENTS.md`](src/components/ui/AGENTS.md) for:
 - When to use / not use composition
 - Naming conventions and checklist
 
+## Layer-Specific Guides
+
+| Directory | Guide | Covers |
+|-----------|-------|--------|
+| `src/app/` | [`app/AGENTS.md`](src/app/AGENTS.md) | App Router, layouts, pages, API routes |
+| `src/components/ui/` | [`ui/AGENTS.md`](src/components/ui/AGENTS.md) | Primitive components, tv(), forwardRef |
+| `src/db/` | [`db/AGENTS.md`](src/db/AGENTS.md) | Drizzle schema, enums, migrations, seed |
+| `src/trpc/` | [`trpc/AGENTS.md`](src/trpc/AGENTS.md) | tRPC routers, context, server vs client |
+| `src/lib/` | [`lib/AGENTS.md`](src/lib/AGENTS.md) | Shiki singleton, language registry |
+| `specs/` | [`specs/AGENTS.md`](specs/AGENTS.md) | Feature spec format and conventions |
+
 ## Screens
 
 | # | Name              | Route         | Status  |
 |---|-------------------|---------------|---------|
 | 1 | Code Input        | `/`           | Done    |
-| 2 | Roast Results     | `/results`    | Pending |
+| 2 | Roast Results     | `/roast/[id]` | Pending |
 | 3 | Shame Leaderboard | `/leaderboard`| Pending |
 | 4 | OG Image          | —             | Pending |
