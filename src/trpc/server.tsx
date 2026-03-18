@@ -16,6 +16,12 @@ export const trpc = createTRPCOptionsProxy<AppRouter>({
   queryClient: getQueryClient,
 });
 
+/**
+ * Server-side caller for direct procedure invocation in Server Components.
+ * Bypasses HTTP — calls the router directly with the tRPC context.
+ */
+export const caller = appRouter.createCaller(createTRPCContext);
+
 export function HydrateClient({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
   return (
