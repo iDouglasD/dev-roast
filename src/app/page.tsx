@@ -5,6 +5,8 @@ import { HomepageStats } from "@/components/homepage-stats";
 import { RoastForm } from "@/components/roast-form";
 import { HydrateClient } from "@/trpc/server";
 
+export const revalidate = 3600;
+
 export default function Home() {
   return (
     <HydrateClient>

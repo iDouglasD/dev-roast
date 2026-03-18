@@ -1,5 +1,5 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import type { BundledLanguage } from "shiki";
 import { tv } from "tailwind-variants";
 import { LeaderboardCodePreview } from "@/components/leaderboard-code-preview";
@@ -7,6 +7,8 @@ import { LeaderboardSkeleton } from "@/components/leaderboard-skeleton";
 import { Badge } from "@/components/ui/badge";
 import { CodeBlock } from "@/components/ui/code-block";
 import { caller } from "@/trpc/server";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Shame Leaderboard — Dev Roast",
@@ -92,7 +94,7 @@ async function LeaderboardContent() {
         <div className="flex items-center gap-2 font-mono text-xs text-text-tertiary">
           <span>{stats.totalRoasts.toLocaleString()} submissions</span>
           <span>·</span>
-          <span>avg score: {stats.avgScore}/10</span>
+          <span>avg score: {stats.avgScore?.toFixed(1)}/10</span>
         </div>
       </section>
 
@@ -114,9 +116,7 @@ async function LeaderboardContent() {
                   <span className="font-bold text-accent-red">
                     {row.score.toFixed(1)}
                   </span>
-                  <Badge
-                    variant={VERDICT_BADGE_VARIANT[row.verdict]}
-                  >
+                  <Badge variant={VERDICT_BADGE_VARIANT[row.verdict]}>
                     {formatVerdict(row.verdict)}
                   </Badge>
                 </div>
@@ -130,7 +130,9 @@ async function LeaderboardContent() {
 
               {/* Roast comment */}
               <div className={commentVariants()}>
-                {"// \""}{row.roastComment}{"\""}
+                {'// "'}
+                {row.roastComment}
+                {'"'}
               </div>
 
               {/* Code block with collapsible */}
