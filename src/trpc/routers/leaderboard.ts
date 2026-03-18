@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { asc, desc, sql } from "drizzle-orm";
 import { roasts } from "@/db/schema";
 import { baseProcedure, createTRPCRouter } from "../init";
 
@@ -16,5 +16,18 @@ export const leaderboardRouter = createTRPCRouter({
       totalRoasts: result.count,
       avgScore: result.avgScore,
     };
+  }),
+
+  top3: baseProcedure.query(async ({ ctx }) => {
+    return ctx.db
+      .select({
+        id: roasts.id,
+        score: roasts.score,
+        code: roasts.code,
+        language: roasts.language,
+      })
+      .from(roasts)
+      .orderBy(asc(roasts.score), desc(roasts.createdAt))
+      .limit(3);
   }),
 });
