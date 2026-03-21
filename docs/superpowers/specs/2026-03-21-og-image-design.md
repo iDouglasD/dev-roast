@@ -16,7 +16,7 @@
 | Route pattern | `app/api/og/[id]/route.tsx` | Dedicated route handler, independent cache, testable via direct URL access |
 | Output format | PNG | Universal crawler compatibility (Twitter, Discord, WhatsApp, Slack) |
 | Primary font | JetBrains Mono (loaded via ArrayBuffer) | Project-wide font, used for logo/score/verdict/lang |
-| Secondary font | Geist Mono (Takumi built-in) | Roast quote text, no manual loading needed |
+| Secondary font | N/A — JetBrains Mono used everywhere | Follows project convention: "JetBrains Mono everywhere" |
 
 ## Architecture
 
@@ -62,10 +62,10 @@ Based on Pencil frame "Screen 4 - OG Image":
 ### Elements (top to bottom)
 
 1. **Logo row** — `>` green (#10b981, 24px, bold 700) + `devroast` white (#fafafa, 20px, weight 500) — JetBrains Mono, gap 8px
-2. **Score row** — score number (160px, weight 900) + `/100` (#4b5563, 56px, normal) — JetBrains Mono, aligned baseline
+2. **Score row** — score number (160px, weight 800/ExtraBold) + `/100` (#4b5563, 56px, normal) — JetBrains Mono, aligned baseline
 3. **Verdict row** — filled circle 12px + verdict text (20px, normal) — gap 8px
 4. **Lang info** — `lang: {language} - {lineCount} lines` (#4b5563, 16px) — JetBrains Mono
-5. **Roast quote** — truncated roastComment in quotes, centered, full width, Geist Mono (22px), #fafafa, line-height 1.5
+5. **Roast quote** — truncated roastComment in quotes, centered, full width, JetBrains Mono (22px), #fafafa, line-height 1.5
 
 ### Score/Verdict Color Mapping
 
@@ -105,8 +105,7 @@ description    → dynamic (truncated roast comment)
 
 ### Fonts
 
-- **JetBrains Mono:** store `.ttf` files in `src/assets/fonts/`, load once at module scope via top-level promises (not per-request) for performance (weights: 400, 500, 700, 900)
-- **Geist Mono:** bundled in Takumi, no config needed
+- **JetBrains Mono:** store `.ttf` files in `src/assets/fonts/`, load once at module scope via top-level promises (not per-request) for performance (weights: 400, 500, 700, 800)
 
 ### Next.js Config
 
