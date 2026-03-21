@@ -134,7 +134,7 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
             {/* Highlighted code overlay */}
             <div
               ref={overlayRef}
-              className="code-editor-overlay pointer-events-none absolute inset-0 overflow-auto px-4 py-4 font-mono text-xs leading-5 whitespace-pre-wrap break-all"
+              className="code-editor-overlay pointer-events-none absolute inset-0 overflow-hidden px-4 py-4 font-mono text-xs leading-5 whitespace-pre-wrap break-all"
               aria-hidden="true"
               dangerouslySetInnerHTML={{ __html: highlightedHtml }}
             />
@@ -147,7 +147,7 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
               onScroll={handleScroll}
               placeholder={placeholder}
               spellCheck={false}
-              className="absolute inset-0 size-full resize-none bg-transparent px-4 py-4 font-mono text-xs leading-5 text-transparent caret-text-primary outline-none placeholder:text-text-muted whitespace-pre-wrap break-all"
+              className="absolute inset-0 size-full resize-none overflow-y-auto bg-transparent px-4 py-4 font-mono text-xs leading-5 text-transparent caret-text-primary outline-none placeholder:text-text-muted whitespace-pre-wrap break-all"
             />
           </div>
         </div>

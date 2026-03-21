@@ -83,3 +83,27 @@ body {
   font-size: inherit !important;
   line-height: inherit !important;
 }
+
+/* Scrollbar — thin & discrete, follows project palette */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-primary) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
