@@ -10,16 +10,46 @@ import { DiffLine } from "@/components/ui/diff-line";
 import { ScoreRing } from "@/components/ui/score-ring";
 import { caller } from "@/trpc/server";
 
-export const metadata: Metadata = {
-  title: "Roast Results — Dev Roast",
-  description: "See the full analysis and suggested fixes for your code.",
-};
-
 // ---------------------------------------------------------------------------
 
 type Props = {
   params: Promise<{ id: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const roast = await caller.roast.getById({ id });
+  if (!roast) return { title: "Roast Not Found — Dev Roast" };
+
+  const verdictLabel = roast.verdict.replace(/_/g, " ");
+  const scoreDisplay = Math.round(roast.score * 10) / 10;
+  const ogUrl = `/api/og/${id}`;
+
+  return {
+    title: `${verdictLabel} (${scoreDisplay}/100) — Dev Roast`,
+    description:
+      roast.roastComment.length > 155
+        ? `${roast.roastComment.slice(0, 155).replace(/\s+\S*$/, "")}...`
+        : roast.roastComment,
+    openGraph: {
+      title: `${verdictLabel} (${scoreDisplay}/100) — Dev Roast`,
+      description: roast.roastComment,
+      images: [
+        {
+          url: ogUrl,
+          width: 1200,
+          height: 630,
+          type: "image/png",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${verdictLabel} (${scoreDisplay}/100) — Dev Roast`,
+      images: [ogUrl],
+    },
+  };
+}
 
 export default async function RoastResultPage({ params }: Props) {
   "use cache";
