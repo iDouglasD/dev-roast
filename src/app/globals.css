@@ -1,25 +1,109 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-mono: var(--font-jetbrains-mono);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* backgrounds */
+  --color-bg-page: #0a0a0a;
+  --color-bg-input: #111111;
+  --color-bg-surface: #0f0f0f;
+  --color-bg-elevated: #1a1a1a;
+
+  /* borders */
+  --color-border-primary: #2a2a2a;
+  --color-border-focus: #10b981;
+
+  /* text */
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #6b7280;
+  --color-text-tertiary: #4b5563;
+  --color-text-muted: #525252;
+
+  /* accents */
+  --color-accent-green: #10b981;
+  --color-accent-red: #ef4444;
+  --color-accent-amber: #f59e0b;
+  --color-accent-cyan: #06b6d4;
+
+  /* syntax highlighting */
+  --color-syn-keyword: #a0a0a0;
+  --color-syn-function: #ffc799;
+  --color-syn-variable: #ffffff;
+  --color-syn-operator: #a0a0a0;
+  --color-syn-string: #99ffe4;
+  --color-syn-number: #ffc799;
+  --color-syn-property: #a0a0a0;
+  --color-syn-type: #ffc799;
+  --color-syn-comment: #8b8b8b;
+
+  /* diff */
+  --color-diff-removed-bg: #ef444415;
+  --color-diff-added-bg: #10b98115;
+  --color-diff-removed-text: #ef4444;
+  --color-diff-added-text: #10b981;
+
+  /* typography — code font size (13px) */
+  --text-code: 0.8125rem;
+  --text-code--line-height: 1;
+
+  /* spacing — toggle track */
+  --spacing-toggle-track: 1.375rem;
+  --spacing-toggle-pad: 0.1875rem;
+
+  /* max-widths */
+  --max-w-card: 30rem;
+  --max-w-code: 35rem;
+  --max-w-editor: 48.75rem;
+  --max-w-leaderboard: 60rem;
+  --max-w-results: 80rem;
+
+  /* widths */
+  --width-editor: 48.75rem;
+  --width-leaderboard: 60rem;
+  --width-results: 80rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+/* Code editor overlay — reset Shiki output to align with textarea */
+.code-editor-overlay pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.code-editor-overlay code {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* Scrollbar — thin & discrete, follows project palette */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-primary) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
 }
