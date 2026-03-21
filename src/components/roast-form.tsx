@@ -1,12 +1,15 @@
 "use client";
 
+import { useMutation } from "@tanstack/react-query";
 import flourite from "flourite";
+import { useRouter } from "next/navigation";
 import { type ComponentProps, useCallback, useEffect, useState } from "react";
 import { tv } from "tailwind-variants";
 import { CodeEditor, MAX_CODE_CHARS } from "@/components/code-editor";
 import { LanguageSelector } from "@/components/language-selector";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
+import { useTRPC } from "@/trpc/client";
 
 const DETECT_DEBOUNCE_MS = 300;
 
@@ -17,6 +20,11 @@ const roastFormVariants = tv({
 type RoastFormProps = ComponentProps<"div">;
 
 function RoastForm({ className, ...props }: RoastFormProps) {
+  const router = useRouter();
+  const trpc = useTRPC();
+  const createRoast = useMutation(trpc.roast.create.mutationOptions());
+  const isSubmitting = createRoast.isPending;
+
   const [code, setCode] = useState("");
   const [roastMode, setRoastMode] = useState(true);
 
@@ -50,6 +58,13 @@ function RoastForm({ className, ...props }: RoastFormProps) {
   /** The effective language passed to the editor */
   const activeLanguage =
     languageMode === "auto" ? detectedLanguage : languageMode;
+
+  const handleSubmit = () => {
+    createRoast.mutate(
+      { code, language: activeLanguage, roastMode },
+      { onSuccess: (data) => router.push(`/roast/${data.id}`) },
+    );
+  };
 
   return (
     <div className={roastFormVariants({ className })} {...props}>
@@ -89,11 +104,20 @@ function RoastForm({ className, ...props }: RoastFormProps) {
           variant="primary"
           size="md"
           className="px-6 py-2.5"
-          disabled={code.length === 0 || code.length > MAX_CODE_CHARS}
+          onClick={handleSubmit}
+          disabled={
+            isSubmitting || code.length === 0 || code.length > MAX_CODE_CHARS
+          }
         >
-          $ roast_my_code
+          {isSubmitting ? "$ roasting..." : "$ roast_my_code"}
         </Button>
       </div>
+
+      {createRoast.isError && (
+        <p className="font-mono text-xs text-accent-red">
+          {"// error: failed to generate roast. try again."}
+        </p>
+      )}
     </div>
   );
 }

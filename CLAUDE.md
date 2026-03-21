@@ -46,6 +46,7 @@ src/
 - **Layout styles**: Applied via `className` at call site, never hardcoded inside components.
 - **Validation**: `npx biome check .` + `npm run build` after changes.
 - **Path alias**: `@/*` maps to `src/*`. Always use `@/` for internal imports.
+- **Git commits**: Never add `Co-Authored-By` trailers to commit messages.
 
 ## Component Patterns
 
