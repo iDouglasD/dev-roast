@@ -95,7 +95,7 @@ async function CodeBlockBody({
       )}
 
       <div
-        className="code-block-content min-w-0 flex-1 overflow-x-auto [&_pre]:m-0! [&_pre]:bg-transparent! [&_pre]:p-3! [&_pre]:font-mono [&_pre]:text-code! [&_pre]:leading-relaxed! [&_code]:font-mono! [&_code]:text-code!"
+        className="code-block-content min-w-0 flex-1 overflow-y-auto [&_pre]:m-0! [&_pre]:bg-transparent! [&_pre]:p-3! [&_pre]:font-mono [&_pre]:text-code! [&_pre]:leading-relaxed! [&_pre]:whitespace-pre-wrap! [&_pre]:break-all! [&_code]:font-mono! [&_code]:text-code!"
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </div>

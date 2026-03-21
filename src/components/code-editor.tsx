@@ -17,6 +17,10 @@ const HIGHLIGHT_DEBOUNCE_MS = 150;
 
 export const MAX_CODE_CHARS = 2000;
 
+export function countCodeChars(code: string): number {
+  return code.replace(/\s/g, "").length;
+}
+
 const codeEditorVariants = tv({
   base: "w-full overflow-hidden border border-border-primary bg-bg-input",
 });
@@ -103,10 +107,10 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
         <div className="flex justify-end border-b border-border-primary px-3 py-1">
           <span
             className={charCounterVariants({
-              overLimit: value.length > MAX_CODE_CHARS,
+              overLimit: countCodeChars(value) > MAX_CODE_CHARS,
             })}
           >
-            {value.length}/{MAX_CODE_CHARS}
+            {countCodeChars(value)}/{MAX_CODE_CHARS}
           </span>
         </div>
 
@@ -130,7 +134,7 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
             {/* Highlighted code overlay */}
             <div
               ref={overlayRef}
-              className="code-editor-overlay pointer-events-none absolute inset-0 overflow-hidden px-4 py-4 font-mono text-xs leading-5"
+              className="code-editor-overlay pointer-events-none absolute inset-0 overflow-hidden px-4 py-4 font-mono text-xs leading-5 whitespace-pre-wrap break-all"
               aria-hidden="true"
               dangerouslySetInnerHTML={{ __html: highlightedHtml }}
             />
@@ -143,7 +147,7 @@ const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(
               onScroll={handleScroll}
               placeholder={placeholder}
               spellCheck={false}
-              className="absolute inset-0 size-full resize-none bg-transparent px-4 py-4 font-mono text-xs leading-5 text-transparent caret-text-primary outline-none placeholder:text-text-muted"
+              className="absolute inset-0 size-full resize-none overflow-y-auto bg-transparent px-4 py-4 font-mono text-xs leading-5 text-transparent caret-text-primary outline-none placeholder:text-text-muted whitespace-pre-wrap break-all"
             />
           </div>
         </div>

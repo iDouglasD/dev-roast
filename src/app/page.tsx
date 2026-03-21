@@ -1,3 +1,6 @@
+"use cache";
+
+import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { HomepageLeaderboard } from "@/components/homepage-leaderboard";
 import { HomepageLeaderboardSkeleton } from "@/components/homepage-leaderboard-skeleton";
@@ -5,9 +8,8 @@ import { HomepageStats } from "@/components/homepage-stats";
 import { RoastForm } from "@/components/roast-form";
 import { HydrateClient } from "@/trpc/server";
 
-export const revalidate = 3600;
-
-export default function Home() {
+export default async function Home() {
+  cacheLife("hours");
   return (
     <HydrateClient>
       <main className="flex flex-1 flex-col items-center gap-8 pt-20">
