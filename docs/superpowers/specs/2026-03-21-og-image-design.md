@@ -30,7 +30,9 @@ Request → extract [id] param → query roast from DB (Drizzle direct)
 ```
 
 - Uses Drizzle directly (not tRPC) since this is a raw route handler
-- Runtime: `nodejs` (required for Takumi native addon)
+- Runtime: `nodejs` (required for Takumi native addon) — export `runtime = "nodejs"` explicitly
+- Validate `[id]` is a valid UUID before querying; return plain 404 (`new Response(null, { status: 404 })`) for invalid or missing IDs
+- Score is `real` (float) in the DB — round to 1 decimal place for display (e.g., `42.7`)
 
 ### Image Layout (1200×630px)
 
@@ -79,7 +81,9 @@ Score number and verdict row (dot + text) share the same color.
 
 ### Metadata in `/roast/[id]/page.tsx`
 
-Replace static `metadata` export with `generateMetadata`:
+Replace static `metadata` export with `generateMetadata`. Fetch roast data via `caller.roast.getById` (same pattern as the page — Next.js deduplicates the request).
+
+Base URL resolution: use `metadataBase` set from `NEXT_PUBLIC_BASE_URL` env var in root layout, or read from `headers()` host as fallback.
 
 ```ts
 og:image       → {baseUrl}/api/og/{id}
@@ -101,7 +105,7 @@ description    → dynamic (truncated roast comment)
 
 ### Fonts
 
-- **JetBrains Mono:** store `.ttf` files in `src/assets/fonts/`, load via `fs.readFile` at request time (weights: 400, 500, 700, 900)
+- **JetBrains Mono:** store `.ttf` files in `src/assets/fonts/`, load once at module scope via top-level promises (not per-request) for performance (weights: 400, 500, 700, 900)
 - **Geist Mono:** bundled in Takumi, no config needed
 
 ### Next.js Config
@@ -118,6 +122,19 @@ serverExternalPackages: ["@takumi-rs/core"]
 |---------|---------|
 | `@takumi-rs/image-response` | JSX-to-PNG image generation |
 
+## File Structure
+
+```
+src/
+├── app/
+│   ├── api/og/[id]/route.tsx    # NEW — OG image route handler
+│   └── roast/[id]/page.tsx      # MODIFIED — static metadata → generateMetadata
+├── assets/
+│   └── fonts/                   # NEW — JetBrains Mono .ttf files
+└── ...
+next.config.ts                   # MODIFIED — add serverExternalPackages
+```
+
 ## Implementation To-Dos
 
 ### Setup
@@ -130,12 +147,16 @@ serverExternalPackages: ["@takumi-rs/core"]
 - [ ] Query roast by ID via Drizzle
 - [ ] Build verdict-to-color mapping utility
 - [ ] Build roast quote truncation utility
-- [ ] Load JetBrains Mono fonts via `fs.readFile`
+- [ ] Load JetBrains Mono fonts at module scope (top-level promises)
+- [ ] Validate UUID param, return 404 for invalid/missing
+- [ ] Export `runtime = "nodejs"` explicitly
 - [ ] Render JSX matching Pencil design
 - [ ] Return `ImageResponse` with PNG format and cache headers
 
 ### Metadata
 - [ ] Convert `/roast/[id]/page.tsx` from static `metadata` to `generateMetadata`
+- [ ] Fetch roast data via `caller.roast.getById` inside `generateMetadata`
+- [ ] Resolve base URL from `NEXT_PUBLIC_BASE_URL` or `headers()` host
 - [ ] Add `og:image`, `og:image:width`, `og:image:height`, `og:image:type`
 - [ ] Add `twitter:card` and `twitter:image`
 - [ ] Dynamic title and description based on roast data
