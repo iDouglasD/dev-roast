@@ -5,7 +5,11 @@ import flourite from "flourite";
 import { useRouter } from "next/navigation";
 import { type ComponentProps, useCallback, useEffect, useState } from "react";
 import { tv } from "tailwind-variants";
-import { CodeEditor, MAX_CODE_CHARS } from "@/components/code-editor";
+import {
+  CodeEditor,
+  countCodeChars,
+  MAX_CODE_CHARS,
+} from "@/components/code-editor";
 import { LanguageSelector } from "@/components/language-selector";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
@@ -106,7 +110,9 @@ function RoastForm({ className, ...props }: RoastFormProps) {
           className="px-6 py-2.5"
           onClick={handleSubmit}
           disabled={
-            isSubmitting || code.length === 0 || code.length > MAX_CODE_CHARS
+            isSubmitting ||
+            code.length === 0 ||
+            countCodeChars(code) > MAX_CODE_CHARS
           }
         >
           {isSubmitting ? "$ roasting..." : "$ roast_my_code"}
