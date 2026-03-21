@@ -23,15 +23,15 @@ All spacing, colors, typography, and layout decisions come from this file.
 
 ```
 src/
-├── app/                    # Routes, layouts, globals.css — see app/AGENTS.md
+├── app/                    # Routes, layouts, globals.css — see app/CLAUDE.md
 │   ├── api/trpc/[trpc]/    # tRPC HTTP handler
 │   └── globals.css         # @theme inline tokens (colors, spacing, typography)
 ├── components/
-│   ├── ui/                 # Primitives — see ui/AGENTS.md
+│   ├── ui/                 # Primitives — see ui/CLAUDE.md
 │   └── ...                 # Feature / layout components
-├── db/                     # Drizzle schema + client — see db/AGENTS.md
-├── lib/                    # Shared utilities — see lib/AGENTS.md
-└── trpc/                   # tRPC setup — see trpc/AGENTS.md
+├── db/                     # Drizzle schema + client — see db/CLAUDE.md
+├── lib/                    # Shared utilities — see lib/CLAUDE.md
+└── trpc/                   # tRPC setup — see trpc/CLAUDE.md
 ```
 
 ## Global Conventions
@@ -49,7 +49,7 @@ src/
 
 ## Component Patterns
 
-See [`src/components/ui/AGENTS.md`](src/components/ui/AGENTS.md) for:
+See [`src/components/ui/CLAUDE.md`](src/components/ui/CLAUDE.md) for:
 
 - tv() structure, forwardRef, displayName
 - Composition pattern (Object.assign dot notation)
@@ -60,12 +60,12 @@ See [`src/components/ui/AGENTS.md`](src/components/ui/AGENTS.md) for:
 
 | Directory | Guide | Covers |
 |-----------|-------|--------|
-| `src/app/` | [`app/AGENTS.md`](src/app/AGENTS.md) | App Router, layouts, pages, API routes |
-| `src/components/ui/` | [`ui/AGENTS.md`](src/components/ui/AGENTS.md) | Primitive components, tv(), forwardRef |
-| `src/db/` | [`db/AGENTS.md`](src/db/AGENTS.md) | Drizzle schema, enums, migrations, seed |
-| `src/trpc/` | [`trpc/AGENTS.md`](src/trpc/AGENTS.md) | tRPC routers, context, server vs client |
-| `src/lib/` | [`lib/AGENTS.md`](src/lib/AGENTS.md) | Shiki singleton, language registry |
-| `specs/` | [`specs/AGENTS.md`](specs/AGENTS.md) | Feature spec format and conventions |
+| `src/app/` | [`app/CLAUDE.md`](src/app/CLAUDE.md) | App Router, layouts, pages, API routes |
+| `src/components/ui/` | [`ui/CLAUDE.md`](src/components/ui/CLAUDE.md) | Primitive components, tv(), forwardRef |
+| `src/db/` | [`db/CLAUDE.md`](src/db/CLAUDE.md) | Drizzle schema, enums, migrations, seed |
+| `src/trpc/` | [`trpc/CLAUDE.md`](src/trpc/CLAUDE.md) | tRPC routers, context, server vs client |
+| `src/lib/` | [`lib/CLAUDE.md`](src/lib/CLAUDE.md) | Shiki singleton, language registry |
+| `specs/` | [`specs/CLAUDE.md`](specs/CLAUDE.md) | Feature spec format and conventions |
 
 ## Screens
 
