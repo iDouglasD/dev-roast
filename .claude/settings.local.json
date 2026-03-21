@@ -26,7 +26,23 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
       "Bash(curl -s -X POST http://localhost:3000/api/trpc/roast.create?batch=1 -H \"Content-Type: application/json\" -d '{\"\"\"\"0\"\"\"\":{\"\"\"\"code\"\"\"\":\"\"\"\"function test\\(\\) { return 1; }\"\"\"\",\"\"\"\"language\"\"\"\":\"\"\"\"javascript\"\"\"\",\"\"\"\"roastMode\"\"\"\":true}}')",
       "Bash(python -c \"import sys,json; d=json.loads\\(sys.stdin.read\\(\\)\\); print\\(d[0][''''error''''][''''message'''']\\)\")",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(curl -sL https://raw.githubusercontent.com/kane50613/takumi/main/README.md)",
+      "Bash(curl -sL https://takumi.kane.tw/docs/migration/image-response)",
+      "Bash(curl:*)",
+      "Bash(xargs ls:*)",
+      "Bash(python3 -c \"import sys,json,base64; d=json.load\\(sys.stdin\\); print\\(base64.b64decode\\(d[''''content'''']\\).decode\\(\\)\\)\")",
+      "Bash(cd:*)",
+      "Bash(unzip -o /tmp/jbmono.zip -d /tmp/jbmono/)",
+      "Read(//tmp/jbmono/fonts/**)",
+      "Bash(cp /tmp/jbmono/fonts/ttf/JetBrainsMono-Regular.ttf src/assets/fonts/)",
+      "Bash(cp /tmp/jbmono/fonts/ttf/JetBrainsMono-Medium.ttf src/assets/fonts/)",
+      "Bash(cp /tmp/jbmono/fonts/ttf/JetBrainsMono-Bold.ttf src/assets/fonts/)",
+      "Bash(cp /tmp/jbmono/fonts/ttf/JetBrainsMono-ExtraBold.ttf src/assets/fonts/)",
+      "Bash(npx tsx -e \":*)",
+      "Bash(DATABASE_URL=\"postgresql://devroast:devroast@localhost:5432/devroast\" psql -c \"SELECT id, score, verdict FROM roasts LIMIT 1;\")",
+      "Bash(node --input-type=module -e \":*)",
+      "mcp__playwright__browser_take_screenshot"
     ]
   }
 }

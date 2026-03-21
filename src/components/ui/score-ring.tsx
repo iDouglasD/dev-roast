@@ -44,7 +44,7 @@ function describeArc(
 }
 
 const ScoreRing = forwardRef<HTMLDivElement, ScoreRingProps>(
-  ({ className, score, maxScore = 10, size = 180, ...props }, ref) => {
+  ({ className, score, maxScore = 100, size = 180, ...props }, ref) => {
     const strokeWidth = 4;
     const radius = (size - strokeWidth) / 2;
     const center = size / 2;
