@@ -1,4 +1,4 @@
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 import { diffLines } from "diff";
 import { buildSystemPrompt, buildUserPrompt } from "./roast-prompt";
@@ -23,7 +23,7 @@ async function generateRoast(
   input: RoastServiceInput,
 ): Promise<RoastServiceOutput> {
   const { object } = await generateObject({
-    model: openai("gpt-4o-mini"),
+    model: google("gemini-2.5-flash"),
     schema: roastOutputSchema,
     system: buildSystemPrompt(input.roastMode),
     prompt: buildUserPrompt(input.code, input.language),
