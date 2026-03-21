@@ -11,6 +11,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000",
+  ),
   title: "Dev Roast",
   description: "Paste your code. Get roasted.",
 };
