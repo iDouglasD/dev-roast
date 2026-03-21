@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import type { BundledLanguage } from "shiki";
@@ -7,8 +8,6 @@ import { LeaderboardSkeleton } from "@/components/leaderboard-skeleton";
 import { Badge } from "@/components/ui/badge";
 import { CodeBlock } from "@/components/ui/code-block";
 import { caller } from "@/trpc/server";
-
-export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Shame Leaderboard — Dev Roast",
@@ -71,6 +70,9 @@ export default function LeaderboardPage() {
 }
 
 async function LeaderboardContent() {
+  "use cache";
+  cacheLife("hours");
+
   const [entries, stats] = await Promise.all([
     caller.leaderboard.top20(),
     caller.leaderboard.stats(),

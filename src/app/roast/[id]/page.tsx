@@ -1,4 +1,6 @@
+import { cacheLife } from "next/cache";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import type { BundledLanguage } from "shiki";
 import { AnalysisCard } from "@/components/ui/analysis-card";
 import { Badge } from "@/components/ui/badge";
@@ -102,6 +104,9 @@ type Props = {
 };
 
 export default async function RoastResultPage({ params }: Props) {
+  "use cache";
+  cacheLife("hours");
+
   // `id` will be used for DB lookup once integrated — validated here
   const { id } = await params;
   void id; // suppresses unused-var lint until real fetch is added
@@ -155,7 +160,9 @@ export default async function RoastResultPage({ params }: Props) {
           </h2>
 
           <CodeBlock>
-            <CodeBlock.Body code={roast.code} lang={roast.language} />
+            <Suspense>
+              <CodeBlock.Body code={roast.code} lang={roast.language} />
+            </Suspense>
           </CodeBlock>
         </section>
 

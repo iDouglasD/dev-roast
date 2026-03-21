@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { AnalysisCard } from "@/components/ui/analysis-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -121,7 +122,9 @@ export default function ComponentsPage() {
                 calculate.js
               </span>
             </CodeBlock.Header>
-            <CodeBlock.Body code={sampleCode} lang="javascript" />
+            <Suspense>
+              <CodeBlock.Body code={sampleCode} lang="javascript" />
+            </Suspense>
           </CodeBlock>
         </div>
       </Section>

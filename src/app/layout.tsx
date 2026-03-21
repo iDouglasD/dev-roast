@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
+import { Suspense } from "react";
 import { Navbar } from "@/components/navbar";
 import { TRPCReactProvider } from "@/trpc/client";
 import "./globals.css";
@@ -25,7 +26,9 @@ export default function RootLayout({
         className={`${jetbrainsMono.variable} flex min-h-screen flex-col antialiased`}
       >
         <Navbar />
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Suspense>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </Suspense>
       </body>
     </html>
   );
